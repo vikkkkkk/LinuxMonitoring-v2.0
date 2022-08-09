@@ -58,7 +58,7 @@ function arguments {
 function spawn {
     folder=$p3
     filename=$(echo $p5 | awk -F. '{print $1}')
-    fileExt=$(echo $p5 | awk -F. '{print $1}')
+    fileExt=$(echo $p5 | awk -F. '{print $2}')
     lastNameFolder=${p3: -1}
     fileName=$filename
     oldName=$fileName
@@ -73,10 +73,15 @@ function spawn {
     fi
 
     for (( i=1; i<$p2; i++ )); do
-        sudo fallocate -l $filesize ""$p1"/"$folder"_"$logDate"/"$fileName"."$fileExt"_"$logDate""
-        line=""$newDate" | "$p3"/"$folder"_"$logDate"/"$fileName"."$fileExt"_"$logDate" | Size of file = ${filesize}."
-        echo "$line" | sudo tee -a $inputFile
-        fileName+="$(echo $lastNameFolder)"
+        sudo mkdir -p "$p1/"$folder"_"$logDate""
+        for (( j=1; j<=$p4; j++ )); do
+            sudo fallocate -l $filesize ""$p1"/"$folder"_"$logDate"/"$fileName"."$fileExt"_"$logDate""
+            line=""$newDate" | "$p3"/"$folder"_"$logDate"/"$fileName"."$fileExt"_"$logDate" | Size of file = ${filesize}."
+            echo "$line" | sudo tee -a $inputFile
+            fileName+="$(echo $lastNameFiles)"
+        done
+        fileName=$oldName
+        folder+="$(echo $lastNameFolder)"
     done
 }
 

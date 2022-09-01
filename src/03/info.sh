@@ -1,6 +1,6 @@
 #!/bin/bash
 
-date="$(cat ../02/log2.txt | awk -F'|' '{print $2}' | awk -F'_' {print $3})"
+date="$(cat ../02/log2.txt | awk -F'|' '{print $2}' | awk -F'_' '{print $3}')"
 newDate=${date: -7}
 
 function clean {
@@ -42,27 +42,25 @@ function arguments {
         done
         sudo rm -rf ../02/log2.txt
         echo "Файл log2.txt - УДАЛЁН"
-
+        
     # date and time of creation
-    elif [[ "$p1" -eq "2" ]]: then
+    elif [[ "$p1" -eq "2" ]]; then
         echo "Введите >DATE< >TIME< Например: >YYYY-MM-DD HH:MM<"
         read srcDate srcTime
         echo "Введите >DATE< >TIME< Например: >YYYY-MM-DD HH:MM<"
         read srcDate srcTime
-        sudo rm -rf $(find / -newermt "$srcDate $srcTime" -not -newermt ")
-    fi
-    # По дате и времени создания
-        sudo rm -r $(find / -newermt "$srcDate $srcTime" -not -newermt "$dstDate $dstTime+1" 2>/dev/null | grep $newDate | sort) 2>/dev/null
-        echo "удалены папки: $(find / -newermt "$srcDate $srcTime" -not -newermt "$dstDate $dstTime+1" 2>/dev/null | grep $newDate | sort)"
+        sudo rm -rf $(find / -newermt "$srcDate $srcTime" -not -newermt "$dstDate $dstTime+1" 2>/dev/null | grep $newDate | sort) 2>/dev/null
+        echo "Папки удалены: $(find / -newermt "$srcDate $srcTime" -not -newermt "$dstDate $dstTime+1" 2>/dev/null | grep $newDate | sort)"
         sudo rm -rf ../02/log2.txt
-        echo "удален файл log2.txt"
-    # По маске имени (т.е. символы, нижнее подчёркивание и дата).
-    elif [[ "$param1" -eq "3" ]]; then
+        echo "Файл log2.txt - УДАЛЁН"
+
+    # Name mask
+    elif [[ "$p1" -eq "3" ]]; then
         clean
         sudo rm -rf ../02/log2.txt
-        echo "удален файл log2.txt"
-    else
-        echo "неверный параметр, введите параметр от 1 до 3!"
+        echo "Файл log2.txt - УДАЛЁН"
+    else 
+        echo "АХТУНГ: параметр введён неверно! Введите параметр от 1 до 3!"
     fi
 }
 
